@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>sildeShow</title>
+        <style type="text/css">
+            html, body #ww { position:absolute;  height: 100%; width: 100%; margin: 0; padding: 0;overflow: hidden;left:0px;top:0px;}
+
+            .cs_slideTextArea {
+                background-color:rgba(0,0,0,0);
+                color:rgba(0,0,0,0);
+            }    
+            .cs_slideTextArea:hover{
+                background-color:rgba(4,4,4,0.5);;
+                color:rgb(255,255,255);
+            }    
+            .cs_slideTextAreaFix{
+                background-color:rgba(4,4,4,0.5);;
+                color:rgb(255,255,255);
+            }    
+
+
+        </style>
+        <link rel="stylesheet" href="reveal/dist/reveal.css">
+        <link rel="stylesheet" href="reveal/dist/theme/white.css">
+        <script src="reveal/dist/reveal.js"></script>
+        <script type='text/javascript' src='KvComponent.js'></script>
+        <script>
+            var kcObj;
+            var reveal;
+            function slideClick() {
+                console.log("slideClick");
+                let pwin = window.parent;
+                var instId = window.frameElement.name;
+                var kcObj = pwin.insts[instId];
+                kcObj.opts.ss_slideInx=reveal.getSlidePastCount();
+                kcObj.action(instId,"slideShow click");
+            }
+
+            function reDraw() {
+                let pwin = window.parent;
+                let gr = window.parent.gr;
+                var instId = window.frameElement.name;
+                kcObj = pwin.insts[instId];
+                var style;
+                var op = kcObj.opts;
+                op.backgroundImageUrl = [];
+                op.backgroundImageUrl.push("js-aiot_5.png");
+                op.backgroundImageUrl.push("test.bmp");
+                op.backgroundImageUrl.push("test.png");
+                op.backgroundImagePosition = "fit";
+                op.backgroundRepeat = "no-repeat";
+                op.paddingLeft = 0;
+                op.paddingTop = 0;
+                var slice_len = op.ss_imageUrls.length;
+                var style;
+                var str = "";
+                str += "<div class='reveal' style='width:100%;'>";
+                str += "<div class='slides'>";
+                for (let i = 0; i < slice_len; i++) {
+                    style = "";
+                    style += "width:" + (op.textPanelWidth) + "px;";
+                    style += "height:" + (op.textPanelHeight) + "px;";
+                    style += "left:" + (0) + "px;";
+                    style += "top:" + (0) + "px;";
+                    style += "background-repeat:" + ("no-repeat") + ";";
+                    style += "background-image:" + ("url(" + op.ss_imageUrls[i] + ")") + ";";
+                    switch (op.backgroundImagePosition) {
+                        case "fit":
+                            style += "background-size:" + ("contain") + ";";
+                            style += "background-position:" + ("center") + ";";
+                            break;
+                        case "center":
+                            style += "background-position:" + (op.backgroundImagePosition) + ";";
+                            break;
+                        case "extend":
+                        default:
+                            style += "background-size:" + (op.textPanelWidth + "px ") + (op.textPanelHeight + "px ") + ";";
+                            break;
+                    }
+
+                    if (op.ss_textAreaHeightRate === null || op.ss_textAreaHeightRate === undefined)
+                        op.ss_textAreaHeightRate = 0;
+                    var textAreaHeight = op.ss_textAreaHeightRate;
+                    if (textAreaHeight <= 1)
+                        textAreaHeight = op.textPanelHeight * textAreaHeight;
+
+                    str += "<section data-background-color='" + op.backgroundColor + "'>";
+                    str += "<div";
+                        
+                    str += " onclick=\"{";
+                    str += " slideClick();";
+                    str += "console.log('" + "kkkkkkkkkkkkk" + "');";
+                    str += "}\"";
+                    
+                    str += " style='" + style + "' >";
+                    style = "";
+                    style += "width:" + (op.textPanelWidth) + "px;";
+                    style += "height:" + (textAreaHeight) + "px;";
+                    style += "left:" + (0) + "px;";
+                    style += "top:" + (0) + "px;";
+                    style += "overflow:" + ("hidden") + ";";
+                    var fontSize = op.fontSizeRate;
+                    if (fontSize < 1)
+                        fontSize = op.fontSizeRate * textAreaHeight;
+                    style += "font-size:" + (fontSize) + "px;";
+                    style += "font-weight:" + (op.fontWeight) + ";";
+                    if (op.ss_showText !== "hidden") {
+                        str += "<div";
+                        if (op.ss_showText === "auto") 
+                            str += " class='" + "cs_slideTextArea" + "'";
+                        if (op.ss_showText === "visiable") 
+                            str += " class='" + "cs_slideTextAreaFix" + "'";
+                        
+                        str += " style='" + style + "' >";
+                        str += op.ss_texts[i];
+                        str += "</div>";
+                    }
+
+                    str += "</div>";
+
+                    str += "</section>";
+                }
+                str += "</div>";
+                str += "</div>";
+                document.getElementById("id_body").innerHTML = str;
+                reveal=new Reveal( document.querySelector( '.reveal' ), {} );
+                if (!op.ss_loop_f)
+                    var loop_f = false;
+                else
+                    var loop_f = true;
+                if (!op.ss_autoSlideTime)
+                    op.ss_autoSlideTime = 0;
+                if (!op.ss_transition)
+                    op.ss_transition = "slide";
+                reveal.initialize({
+                    margin: 0.0,
+                    center: false,
+                    disableLayout: true,
+                    slideNumber: true,
+                    //controls:true,
+                    controlsLayout: 'bottom-right', //edges,bottom-right',
+                    //autoSlideStoppable: false,
+                    //=================
+                    loop: loop_f,
+                    autoSlide: op.ss_autoSlideTime,
+                    transition: op.ss_transition, // none/fade/slide/convex/concave/zoom
+                    backgroundTransition: op.ss_transition // none/fade/slide/convex/concave/zoom
+                });
+                /*
+                reveal.on( 'click', event => {
+                    slideClick(reveal.getSlidePastCount()); 
+                } );
+                reveal.on( 'slidetransitionend', event => {
+                    console.log("aaaaaaa")
+                } );                
+                */
+                op.revealObj=reveal;
+            }
+            function bodyLoad() {
+                reDraw();
+            }
+        </script>
+    </head>
+    <body id="id_body" onload="bodyLoad()">
+    </body>
+</html>

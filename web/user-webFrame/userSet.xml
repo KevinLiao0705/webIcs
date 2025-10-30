@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<properties>
+	<propertie name="user">
+		<item key="kevin" value="password:1234,priority:0" />
+		<item key="amy" value="password:1234,priority:0" />
+	</propertie>
+</properties>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>sildeShow</title>
+        <style type="text/css">
+            html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+        </style>
+        <script type='text/javascript' src='cheetahGrid.es5.js'></script>
+        <script>
+            var kcObj;
+            var grid;
+            function gridFunc(elemId,gridObj) {
+                var fatherElem=document.getElementById(elemId);
+                var grid = new cheetahGrid.ListGrid({
+                    parentElement: fatherElem,
+                    header: gridObj.header,
+                    records: gridObj.records,
+                    frozenColCount: gridObj.frozenColCount
+                });
+                return grid;
+            }
+            ;
+            var reFlash=function reflash() {
+                grid.dispose();     //ok
+                reDraw();
+            
+            }
+            function reDraw() {
+                let pwin=window.parent;
+                let gr=window.parent.gr;
+                var instId=window.frameElement.name;
+                //var kcObj = pwin.insts[instId];
+                var kcObj = gr.gridKcObj;
+                
+                
+                kcObj.opts.grid=gridFunc("gridDiv",kcObj.gridObj);
+                kcObj.opts.gridReflash=reFlash;
+                console.log(kcObj.opts.grid);
+            }    
+            function bodyLoad() {
+                reDraw();
+            }
+            
+            function myFunction() {
+                console.log("AAAAAAAAAAAAAAA");
+            }
+            function testFunc() {
+                console.log("AAAAAAAAAAAAAAA");
+            }    
+            
+//        <button onclick="myFunction()">Click me</button>
+        </script>
+    </head>
+    <body onload="bodyLoad()" style="height: 100%; width:100%;background-color: #fff ">
+        <div id="gridDiv" style="height: 100%; width:100%;"></div>
+    </body>
+</html>

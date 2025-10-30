@@ -1,0 +1,22 @@
+﻿1   install java8:
+2   install tomcat9 web server :
+3
+    安裝WiringPi
+
+4 set raspi-config
+	uart enable ,"login by serial" disable boot auto login
+
+//======================================    
+* copy interfaces to /etc/network/ 
+* DELETE "/var/lib/tomcat9/webapps/ROOT" fold
+* reboot
+
+Copy "ROOT.war" to  "/var/lib/tomcat8/webapps/"
+Copy setdata.xml "/var/lib/tomcat9/webapps/ROOT/"
+Copy setdata.db "/var/lib/tomcat9/webapps/ROOT/"
+
+
+//for Console
+* edit /home/pi/.bashrc
+    insert "[ -z $DISPLAY ] && [ $(tty) = "/dev/tty1" ] && ./autostart.sh"
+    to last line

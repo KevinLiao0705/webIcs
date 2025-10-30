@@ -1,0 +1,29 @@
+[winFrame_bm]	<56>
+[winFrame_wm]                <8>
+[winFrame_hm]                 <30>               --0:text,1:int,2:float 
+[linuxWin_f]				<1>
+[ipaddress]				<192.168.0.123>
+[remote_f]				<1>
+[netmask]				<255.255.255.0>
+[gateway]				<192.168.0.1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
