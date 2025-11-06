@@ -15,7 +15,7 @@ import java.util.Map;
 public class GB {
 
     static String version = "2.0";
-    public static int os = 1; //0: not defined,    1: win,    2 : linux, 
+    public static int os = 2; //0: not defined,    1: win,    2 : linux, 
     public static String appName = "webIcs";
     //================================================
     static int webSocketPort = 25666;

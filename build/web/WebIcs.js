@@ -452,6 +452,7 @@ class Md_webIcs {
                 page1Phone.holdKey_innerTextColor = "#000";
                 page1Phone.muteKey_innerTextColor = "#000";
                 page1Phone.dtmfKey_innerTextColor = "#000";
+                page1Phone.listenKey_innerTextColor = "#000";
                 if (sipData.sipFlag & 0x04) {//nowLine
                     //line2
                     page1Phone.line1Key_innerTextColor = "#000";
@@ -474,8 +475,14 @@ class Md_webIcs {
                     if (sipData.sipFlag & 0x08)
                         page1Phone.dtmfKey_innerTextColor = "#f44";
                 }
-
-
+                var exStatus = md.opts.icsDatas.exStatusMap;
+                var listenSelfNumber=gr.paraSet.icsUiSet.split("~")[4];
+                var exObj=exStatus[listenSelfNumber];
+                if(exObj){
+                    if(exObj.status>=3)
+                        page1Phone.listenKey_innerTextColor = "#f44";
+                    
+                }
                 if (lineSta0 > 0) {
                     if (lineSta0 < 3) {
                         if (gr.flash_f)
@@ -724,6 +731,9 @@ class Md_webIcs {
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.speakerKey_baseColor", "baseColor");
             var sobj = mdObj.compRefs["phoneKeyS"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.phoneKeyS_backgroundInx", "backgroundInx", 1);
+            
+            var sobj = mdObj.compRefs["funcButton#9"];
+            sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.listenKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#14"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.holdKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#15"];
@@ -750,6 +760,9 @@ class Md_webIcs {
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.speakerKey_baseColor", "baseColor");
             var sobj = mdObj.compRefs["phoneKeyS"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.phoneKeyS_backgroundInx", "backgroundInx", 1);
+            
+            var sobj = mdObj.compRefs["funcButton#9"];
+            sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.listenKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#14"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.holdKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#15"];
@@ -1860,7 +1873,27 @@ class Md_webIcs {
                 obj.act = "callNumber";
                 obj.number = number;
                 self.sendSocket(obj);
-
+            };
+            var listenNumberPrg = function (phoneSet, inx) {
+                var obj = {};
+                obj.phoneSet = 2;
+                var exStatus = md.opts.icsDatas.exStatusMap;
+                var listenSelfNumber=gr.paraSet.icsUiSet.split("~")[4];
+                var exObj=exStatus[listenSelfNumber];
+                if(exObj){
+                    if(exObj.status>=3){
+                        obj.act = "phoneKeyClick";
+                        obj.key = "hangon";
+                        self.sendSocket(obj);
+                    }
+                    else{
+                        var sipData=md.opts.icsDatas["sipData"+phoneSet];
+                        var number=sipData.selfNumber;
+                        obj.act = "listenNumber";
+                        obj.number = number;
+                        self.sendSocket(obj);
+                    }    
+                }
             };
 
             var cname = lyMap.get("mainBody");
@@ -1892,6 +1925,10 @@ class Md_webIcs {
             opts.hotlines = gr.paraSet.phAHotlines;
             opts.actionFunc = function (iobj) {
                 console.log(iobj);
+                if (iobj.key === "listen") {
+                    listenNumberPrg(0);
+                    return;
+                }
                 if (iobj.key === "set") {
                     infCallPrg(0);
                     return;
@@ -1923,7 +1960,7 @@ class Md_webIcs {
             opts.actionFunc = function (iobj) {
                 console.log(iobj);
                 if (iobj.key === "listen") {
-                    infCallPrg(1);
+                    listenNumberPrg(1);
                     return;
                 }
                 if (iobj.key === "set") {
@@ -3611,9 +3648,9 @@ class Md_webIcs {
                                 var icsSet = gr.paraSet.icsUiSet;
                                 var strA = icsSet.split("~");
                                 var setObjs = [];
-                                var names = ["主控器 IP", "主手話機 IP", "副手話機 IP", "監控話機 IP"];
-                                var ids = ["mainCtrIp", "mainSoftPhoneIp", "subSoftPhoneIp","moniterPhoneIp"];
-                                var types = ["nstr", "nstr", "nstr","nstr"];
+                                var names = ["主控器 IP", "主手話機 IP", "副手話機 IP", "監控話機 IP","監控話機 號碼"];
+                                var ids = ["mainCtrIp", "mainSoftPhoneIp", "subSoftPhoneIp","moniterPhoneIp","moniterNumber"];
+                                var types = ["nstr", "nstr", "nstr","nstr","nstr"];
                                 for (var i = 0; i < names.length; i++) {
                                     var setObj = sys.setOptsSetFix(names[i], types[i]);
                                     setObj.value = strA[i];
@@ -3624,6 +3661,11 @@ class Md_webIcs {
                                     setObj.nameFontSize = "0.6rh";
                                     setObj.padType = "ipAddress";
                                     setObj.checkLegelType = "ipAddress";
+                                    if(i===4){
+                                        setObj.padType = "phoneNumber";
+                                        setObj.checkLegelType = "phoneNumber";
+                                    }
+                                    
                                     setObjs.push(setObj);
                                 }
                                 var opts = {};
@@ -3637,6 +3679,7 @@ class Md_webIcs {
                                         str += "~" + iobj.value.mainSoftPhoneIp;
                                         str += "~" + iobj.value.subSoftPhoneIp;
                                         str += "~" + iobj.value.moniterPhoneIp;
+                                        str += "~" + iobj.value.moniterNumber;
                                         gr.paraSet.icsUiSet = str;
                                         self.saveParas();
                                     }
