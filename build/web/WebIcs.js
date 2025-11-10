@@ -178,21 +178,21 @@ class Md_webIcs {
                     continue;
                 }
                 st.slotNos.push("#000");
-                if(icsDatas.mastctr&0x80){
-                    if(i===(icsDatas.mastctr&15)){
-                        st.slotNos[i]="#0f0";
+                if (icsDatas.mastctr & 0x80) {
+                    if (i === (icsDatas.mastctr & 15)) {
+                        st.slotNos[i] = "#0f0";
                     }
-                    if(!gr.preMastCtr)
-                        gr.preMastCtr=icsDatas.mastctr;
-                    else{
-                        if(gr.preMastCtr!==icsDatas.mastctr){
-                            gr.preMastCtr=icsDatas.mastctr;
+                    if (!gr.preMastCtr)
+                        gr.preMastCtr = icsDatas.mastctr;
+                    else {
+                        if (gr.preMastCtr !== icsDatas.mastctr) {
+                            gr.preMastCtr = icsDatas.mastctr;
                             console.log("reload page");
                             location.reload(true);
                         }
                     }
                 }
-                
+
                 var nameStr = "&nbsp";
                 st.slotNames.push(nameStr + self.getSlotName(slotData));
                 var ledInx = 0;//ngryb
@@ -476,12 +476,12 @@ class Md_webIcs {
                         page1Phone.dtmfKey_innerTextColor = "#f44";
                 }
                 var exStatus = md.opts.icsDatas.exStatusMap;
-                var listenSelfNumber=gr.paraSet.icsUiSet.split("~")[4];
-                var exObj=exStatus[listenSelfNumber];
-                if(exObj){
-                    if(exObj.status>=3)
+                var listenSelfNumber = gr.paraSet.icsUiSet.split("~")[4];
+                var exObj = exStatus[listenSelfNumber];
+                if (exObj) {
+                    if (exObj.status >= 3)
                         page1Phone.listenKey_innerTextColor = "#f44";
-                    
+
                 }
                 if (lineSta0 > 0) {
                     if (lineSta0 < 3) {
@@ -590,9 +590,9 @@ class Md_webIcs {
             //gr.ws = new WebSocket('ws://' + "192.168.0.28" + ':' + gr.webSocketPort + '/websocket');
             //gr.ws = new WebSocket('ws://' + "192.168.191.9" + ':' + gr.webSocketPort + '/websocket');
             //gr.ws = new WebSocket('ws://' + gr.webSocketAddress + ':' + gr.webSocketPort + '/websocket');
-            if(gr.testWebSocketIp)
+            if (gr.testWebSocketIp)
                 gr.ws = new WebSocket('ws://' + gr.testWebSocketIp + ':' + gr.webSocketPort);
-            else    
+            else
                 gr.ws = new WebSocket('ws://' + gr.webIp + ':' + gr.webSocketPort);
         } catch (ex) {
             console.log(ex);
@@ -711,7 +711,7 @@ class Md_webIcs {
                 }
                 var slotNoObj = md.compRefs["slotNo#" + i];
                 var str0 = "self.fatherMd.stas.slotNos#" + i;
-                if(slotNoObj){
+                if (slotNoObj) {
                     sys.setInputWatch(slotNoObj, "directReg", str0, "innerTextColor", 1);
                 }
 
@@ -731,7 +731,7 @@ class Md_webIcs {
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.speakerKey_baseColor", "baseColor");
             var sobj = mdObj.compRefs["phoneKeyS"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.phoneKeyS_backgroundInx", "backgroundInx", 1);
-            
+
             var sobj = mdObj.compRefs["funcButton#9"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.listenKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#14"];
@@ -760,7 +760,7 @@ class Md_webIcs {
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.speakerKey_baseColor", "baseColor");
             var sobj = mdObj.compRefs["phoneKeyS"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.phoneKeyS_backgroundInx", "backgroundInx", 1);
-            
+
             var sobj = mdObj.compRefs["funcButton#9"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone1.listenKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#14"];
@@ -1377,8 +1377,8 @@ class Md_webIcs {
                 var opts = {};
                 opts.zIndex = 10;
                 opts.zzIndex = 10;
-                opts.textAlign="center";
-                opts.innerText=i+1;
+                opts.textAlign = "center";
+                opts.innerText = i + 1;
                 comps[cname] = {name: "slotNo#" + i, type: "plate~none", opts: opts};
 
 
@@ -1387,11 +1387,11 @@ class Md_webIcs {
                 opts.backgroundInx = 0;
                 opts.zIndex = 10;
                 opts.zzIndex = 10;
-                opts.textAlign="center";
-                
+                opts.textAlign = "center";
+
                 comps[cname] = {name: "slotLed#" + i, type: "label~led", opts: opts};
-                
-                
+
+
                 var cname = lyMap.get("pnMainUp") + "~" + i;
                 var opts = {};
                 opts.backgroundInx = 0;
@@ -1874,27 +1874,72 @@ class Md_webIcs {
                 obj.number = number;
                 self.sendSocket(obj);
             };
+
+
             var listenNumberPrg = function (phoneSet, inx) {
                 var obj = {};
                 obj.phoneSet = 2;
                 var exStatus = md.opts.icsDatas.exStatusMap;
-                var listenSelfNumber=gr.paraSet.icsUiSet.split("~")[4];
-                var exObj=exStatus[listenSelfNumber];
-                if(exObj){
-                    if(exObj.status>=3){
+                var listenSelfNumber = gr.paraSet.icsUiSet.split("~")[4];
+                var exObj = exStatus[listenSelfNumber];
+                if (exObj) {
+                    if (exObj.status >= 3) {
                         obj.act = "phoneKeyClick";
                         obj.key = "hangon";
                         self.sendSocket(obj);
-                    }
-                    else{
-                        var sipData=md.opts.icsDatas["sipData"+phoneSet];
-                        var number=sipData.selfNumber;
+                    } else {
+                        var sipData = md.opts.icsDatas["sipData" + phoneSet];
+                        var number = sipData.selfNumber;
                         obj.act = "listenNumber";
                         obj.number = number;
                         self.sendSocket(obj);
-                    }    
+                    }
                 }
             };
+
+            var transferNumberPrg = function (phoneSet, inx) {
+                var setObjs = [];
+                var setObj = {};
+                setObj.name = "號碼";
+                setObj.value = "0";
+                setObj.dataType = "str";
+                setObj.setType = "inputText";
+                setObj.padType = "phoneNumber";
+                setObj.checkLegelType = "phoneNumber";
+                setObj.titleWidth = 100;
+                setObj.showDataType_f = 0;
+                setObj.nameFontSize = "0.6rh";
+                setObj.nullOk_f = 1;
+                setObj.id = "number";
+
+                setObjs.push(setObj);
+                var opts = {};
+                opts.title = "電話轉接";
+                opts.pageItems = 1;
+                opts.rowCount = 1;
+                opts.actionFunc = function (iobj) {
+                    console.log(iobj);
+                    if (iobj.act === "valueChange") {
+                        if (iobj.value.number) {
+                            var obj = {};
+                            obj.act = "transferNumber";
+                            obj.number = iobj.value.number;
+                            obj.phoneSet=phoneSet;
+                            self.sendSocket(obj);
+
+                        }
+                    }
+                };
+                opts.tagOn_f = 0;
+                opts.setObjs = setObjs;
+                opts.phoneSet = phoneSet;
+                var height = 150;
+                var mod = new Model("", "Md_inputLineBox~sys", opts, {});
+                sys.popModel(mod, 800, height);
+
+
+            };
+
 
             var cname = lyMap.get("mainBody");
             var opts = {};
@@ -1925,6 +1970,10 @@ class Md_webIcs {
             opts.hotlines = gr.paraSet.phAHotlines;
             opts.actionFunc = function (iobj) {
                 console.log(iobj);
+                if (iobj.key === "transfer") {
+                    transferNumberPrg(0);
+                    return;
+                }
                 if (iobj.key === "listen") {
                     listenNumberPrg(0);
                     return;
@@ -1959,6 +2008,10 @@ class Md_webIcs {
             opts.hotlines = gr.paraSet.phBHotlines;
             opts.actionFunc = function (iobj) {
                 console.log(iobj);
+                if (iobj.key === "transfer") {
+                    transferNumberPrg(1);
+                    return;
+                }
                 if (iobj.key === "listen") {
                     listenNumberPrg(1);
                     return;
@@ -2240,6 +2293,7 @@ class Md_webIcs {
                                     }
                                     setObjs.push(setObj);
                                 }
+
                                 var opts = {};
                                 opts.title = titleText + " " + (index + 1);
                                 opts.pageItems = 3;
@@ -2476,15 +2530,15 @@ class Md_webIcs {
                                             setObj.memo_f = 1;
                                             setObj.selectBox = {xc: 2, yc: 16};
                                         }
-                                        if(ids[i]==="channel"){
-                                            if(phType==="mag")
-                                                setObj.max=3;
-                                            if(phType==="fxs")
-                                                setObj.max=7;
-                                            if(phType==="t1s")
-                                                setObj.max=3;
-                                            
-                                            
+                                        if (ids[i] === "channel") {
+                                            if (phType === "mag")
+                                                setObj.max = 3;
+                                            if (phType === "fxs")
+                                                setObj.max = 7;
+                                            if (phType === "t1s")
+                                                setObj.max = 3;
+
+
                                         }
                                         setObj.value = values[i];
                                         setObj.id = ids[i];
@@ -3648,9 +3702,9 @@ class Md_webIcs {
                                 var icsSet = gr.paraSet.icsUiSet;
                                 var strA = icsSet.split("~");
                                 var setObjs = [];
-                                var names = ["主控器 IP", "主手話機 IP", "副手話機 IP", "監控話機 IP","監控話機 號碼"];
-                                var ids = ["mainCtrIp", "mainSoftPhoneIp", "subSoftPhoneIp","moniterPhoneIp","moniterNumber"];
-                                var types = ["nstr", "nstr", "nstr","nstr","nstr"];
+                                var names = ["主控器 IP", "主手話機 IP", "副手話機 IP", "監控話機 IP", "監控話機 號碼"];
+                                var ids = ["mainCtrIp", "mainSoftPhoneIp", "subSoftPhoneIp", "moniterPhoneIp", "moniterNumber"];
+                                var types = ["nstr", "nstr", "nstr", "nstr", "nstr"];
                                 for (var i = 0; i < names.length; i++) {
                                     var setObj = sys.setOptsSetFix(names[i], types[i]);
                                     setObj.value = strA[i];
@@ -3661,11 +3715,11 @@ class Md_webIcs {
                                     setObj.nameFontSize = "0.6rh";
                                     setObj.padType = "ipAddress";
                                     setObj.checkLegelType = "ipAddress";
-                                    if(i===4){
+                                    if (i === 4) {
                                         setObj.padType = "phoneNumber";
                                         setObj.checkLegelType = "phoneNumber";
                                     }
-                                    
+
                                     setObjs.push(setObj);
                                 }
                                 var opts = {};
@@ -3820,17 +3874,34 @@ class Md_webIcs {
 
 
                             if (iobj.inx === 22) {//"ICS設定檔 載入"
+                                /*
+                                 var actionFunc = function (content) {
+                                 gr.paraSet = JSON.parse(content);
+                                 mac.saveParaSet();
+                                 };
+                                 mac.readLocalTextFile(actionFunc, ".json");
+                                 return;
+                                 */
+
+
                                 var actionFunc = function (files) {
-                                    sv.uploadFiles(files, "user-" + gr.systemName, "saveFileToDir", "paraTest.json");
+                                    sv.uploadFiles(files, "user-" + gr.systemName, "saveFileToDir", "paraSet.json");
                                 };
                                 mac.uploadeFiles(actionFunc, ".json");
                                 return;
+
                             }
 
                             if (iobj.inx === 23) {//"ICS設定檔 儲存"
-                                var fileName = "user-" + gr.systemName + "/paraSet.json";
-                                mac.saveFileToLocal(fileName, "paraSet.json")
+                                var fileName = "paraSet.json";
+                                var dataStr = JSON.stringify(gr.paraSet);
+                                mac.saveStringToLocalFile(fileName, dataStr);
                                 return;
+
+
+                                //var fileName = "user-" + gr.systemName + "/paraSet.json";
+                                //mac.saveFileToLocal(fileName, "paraSet.json")
+                                //return;
                             }
 
                         };

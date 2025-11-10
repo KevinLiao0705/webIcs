@@ -181,6 +181,22 @@ class Macro {
         a.click();
     }
     
+
+    saveStringToLocalFile(fileName, dataStr) {
+        let a = document.createElement('a');
+        a.href = "data:application/octet-stream," + encodeURIComponent(dataStr);
+        a.download = fileName;
+        a.click();
+    }
+    
+    saveParaSet(name, value) {
+        if (name) {
+            gr.paraSet[name] = value;
+        }
+        var fileName = "paraSet";
+        var content = JSON.stringify(gr.paraSet);
+        sv.saveStringToFile("responseDialogError", "null", fileName, content);
+    }    
     
     setKvTextType(type, id) {
         var obj = {};

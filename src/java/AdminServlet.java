@@ -313,11 +313,16 @@ public final class AdminServlet extends HttpServlet {
                                 break;
 
                             case "saveFileToDir":
-                                filePath = GB.webRootPath + strF[1] + "/";
-                                if (strF.length >= 3) {
-                                    file = new File(filePath + strF[2]);
+                                if (strF[2].equals("paraSet.json")) {
+                                    file = new File(GB.paraSetPath +"/"+ strF[2]);
+
                                 } else {
-                                    file = new File(filePath + fileName);
+                                    filePath = GB.webRootPath + strF[1] + "/";
+                                    if (strF.length >= 3) {
+                                        file = new File(filePath + strF[2]);
+                                    } else {
+                                        file = new File(filePath + fileName);
+                                    }
                                 }
                                 fi.write(file);
                                 break;
@@ -1056,12 +1061,11 @@ public final class AdminServlet extends HttpServlet {
                     Lib.netInf(0);
                     putJos(outJsoOpts, "value", content);
                     putJos(outJsoOpts, "paras", paraContent);
-                    
-                    String[] strX=GB.real_ip_str.split("\\.");
-                    String netAddr=strX[0]+"."+ strX[1]+"."+strX[2]+".99";
-                    String virtualIp=netAddr;
-                    
-                    
+
+                    String[] strX = GB.real_ip_str.split("\\.");
+                    String netAddr = strX[0] + "." + strX[1] + "." + strX[2] + ".99";
+                    String virtualIp = netAddr;
+
                     putJos(outJsoOpts, "webIp", virtualIp);
                     putJoo(outJso, "opts", outJsoOpts);
                     loadOutJsoResponseOk(optsJso, outJso, "Login OK.");

@@ -2,7 +2,7 @@ class GlobalRes {
     constructor() {
         this.testWebSocketIp = "";
         //this.testWebSocketIp = "192.168.190.99";
-        //this.testWebSocketIp = "192.168.0.28";
+        this.testWebSocketIp = "192.168.0.28";
         //this.appName="webBuilder";
         //this.appName="sync";
         //this.appName="oledKeyboard";
