@@ -421,6 +421,9 @@ class Md_webIcs {
                     var sipData = sipData1;
                     var page1Phone = st.page1Phone1 = {};
                 }
+                
+                
+                
 
                 if (sipData.sipFlag & 0x04) {//nowLine
                     var handStatus = sipData.handStatus >> 4;
@@ -453,6 +456,10 @@ class Md_webIcs {
                 page1Phone.muteKey_innerTextColor = "#000";
                 page1Phone.dtmfKey_innerTextColor = "#000";
                 page1Phone.listenKey_innerTextColor = "#000";
+                page1Phone.reDirectKey_innerTextColor = "#000";
+                if (sipData.sipFlag & 0x80) {//reDirect
+                    page1Phone.reDirectKey_innerTextColor = "#f44";
+                }
                 if (sipData.sipFlag & 0x04) {//nowLine
                     //line2
                     page1Phone.line1Key_innerTextColor = "#000";
@@ -475,6 +482,8 @@ class Md_webIcs {
                     if (sipData.sipFlag & 0x08)
                         page1Phone.dtmfKey_innerTextColor = "#f44";
                 }
+                
+                
                 var exStatus = md.opts.icsDatas.exStatusMap;
                 var listenSelfNumber = gr.paraSet.icsUiSet.split("~")[4];
                 var exObj = exStatus[listenSelfNumber];
@@ -739,7 +748,7 @@ class Md_webIcs {
             var sobj = mdObj.compRefs["funcButton#15"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.muteKey_innerTextColor", "innerTextColor");
             var sobj = mdObj.compRefs["funcButton#16"];
-            sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.dtmfKey_innerTextColor", "innerTextColor");
+            sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.reDirectKey_innerTextColor", "innerTextColor");
 
             var sobj = mdObj.compRefs["funcButton#12"];
             sys.setInputWatch(sobj, "directReg", "self.fatherMd.fatherMd.stas.page1Phone0.line1Key_baseColor", "baseColor");
@@ -1901,7 +1910,7 @@ class Md_webIcs {
                 var setObjs = [];
                 var setObj = {};
                 setObj.name = "號碼";
-                setObj.value = "0";
+                setObj.value = "123";
                 setObj.dataType = "str";
                 setObj.setType = "inputText";
                 setObj.padType = "phoneNumber";
@@ -1924,7 +1933,7 @@ class Md_webIcs {
                             var obj = {};
                             obj.act = "transferNumber";
                             obj.number = iobj.value.number;
-                            obj.phoneSet=phoneSet;
+                            obj.phoneSet = phoneSet;
                             self.sendSocket(obj);
 
                         }
@@ -1940,6 +1949,63 @@ class Md_webIcs {
 
             };
 
+            var reDirectNumberPrg = function (phoneSet, inx) {
+
+                if (phoneSet === 0)
+                    var sipData = md.opts.icsDatas.sipData0;
+                if (phoneSet === 1)
+                    var sipData = md.opts.icsDatas.sipData1;
+                if (sipData.sipFlag & 0x80) {
+                    var obj = {};
+                    obj.act = "reDirectNumber";
+                    obj.number = "reset";
+                    obj.phoneSet = phoneSet;
+                    self.sendSocket(obj);
+                    return;
+
+
+                }
+                var setObjs = [];
+                var setObj = {};
+                setObj.name = "號碼";
+                setObj.value = "123";
+                setObj.dataType = "str";
+                setObj.setType = "inputText";
+                setObj.padType = "phoneNumber";
+                setObj.checkLegelType = "phoneNumber";
+                setObj.titleWidth = 100;
+                setObj.showDataType_f = 0;
+                setObj.nameFontSize = "0.6rh";
+                setObj.nullOk_f = 1;
+                setObj.id = "number";
+
+                setObjs.push(setObj);
+                var opts = {};
+                opts.title = "無條件電話轉接";
+                opts.pageItems = 1;
+                opts.rowCount = 1;
+                opts.actionFunc = function (iobj) {
+                    console.log(iobj);
+                    if (iobj.act === "valueChange") {
+                        if (iobj.value.number) {
+                            var obj = {};
+                            obj.act = "reDirectNumber";
+                            obj.number = iobj.value.number;
+                            obj.phoneSet = phoneSet;
+                            self.sendSocket(obj);
+
+                        }
+                    }
+                };
+                opts.tagOn_f = 0;
+                opts.setObjs = setObjs;
+                opts.phoneSet = phoneSet;
+                var height = 150;
+                var mod = new Model("", "Md_inputLineBox~sys", opts, {});
+                sys.popModel(mod, 800, height);
+
+
+            };
 
             var cname = lyMap.get("mainBody");
             var opts = {};
@@ -1972,6 +2038,10 @@ class Md_webIcs {
                 console.log(iobj);
                 if (iobj.key === "transfer") {
                     transferNumberPrg(0);
+                    return;
+                }
+                if (iobj.key === "reDirect") {
+                    reDirectNumberPrg(0);
                     return;
                 }
                 if (iobj.key === "listen") {
@@ -2012,6 +2082,12 @@ class Md_webIcs {
                     transferNumberPrg(1);
                     return;
                 }
+                if (iobj.key === "reDirect") {
+                    reDirectNumberPrg(1);
+                    return;
+                }
+
+
                 if (iobj.key === "listen") {
                     listenNumberPrg(1);
                     return;
@@ -4837,12 +4913,12 @@ class Md_phoneBox {
         var texts = [
             "✖", '▲', "✔", "♫+", "♫-", '<i class="gf">&#xe0e0</i>'
                     , "◀", "▼︎", "▶︎︎︎", '<i class="gf">&#xe023</i>', '<i class="gf">&#xe61c</i>', '<i class="gf">&#xf233</i>'
-                    , "Ⅰ", "Ⅱ", '<i class="gf">&#xe620</i>', '<i class="gf">&#xe02b</i>', "dtmf", '<i class="gf">&#xebba</i>'
+                    , "Ⅰ", "Ⅱ", '<i class="gf">&#xe620</i>', '<i class="gf">&#xe02b</i>', '<i class="gf">&#xe9ba</i>', '<i class="gf">&#xebba</i>'
         ];
         var ids = [
             "cancle", "up", "ok", "+", "-", "set"
                     , "left", "down", "right", "listen", "transfer", "meetInf"
-                    , "line1", "line2", "hold", "mute", "dtmf", "broadInf"
+                    , "line1", "line2", "hold", "mute", "reDirect", "broadInf"
         ];
         for (var i = 0; i < 18; i++) {
             var cname = lyMap.get("pnFuncKey") + "~" + i;

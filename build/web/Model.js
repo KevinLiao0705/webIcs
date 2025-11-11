@@ -2630,6 +2630,11 @@ class Md_inputLineBox {
         if (inputObj) {
             var inputElem = inputObj.elems["input"];
             inputElem.focus();
+        if(md.opts.setObjs.length===1)            
+            inputElem.select();
+            
+            
+            
         }
 
 
